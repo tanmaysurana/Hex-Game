@@ -11,7 +11,7 @@ public:
   HexBoard(int size): size(size) {
     this->hex_board = new graph((this->size) * (this->size));
     int i{}, j{}; //positon of hexagon as (i, j)
-    int n{}; //Node number derived from i and j (n = i*size + j)
+    int n{}; //Node number derived from i and j (n == i*size + j)
     const int s = this->size;
     for(i = 0; i < s; i++) {
       for(j = 0; j < s; j++) {
