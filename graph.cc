@@ -8,14 +8,14 @@
 using namespace std;
 
 class graph {
-	private:
+protected:
 	const int size; //Number of Vertices
 	bool** A; //Adjacency matrix
-	const int range; //For range of weights
+	const int range; //Range of weights
 	int** Cost; //Cost (or Weight) Matrix
 
-	public:
-	graph(int size, int range = 0): size(size), range(range) {
+public:
+	graph(int size = 0, int range = 0): size(size), range(range) {
 		A = new bool*[size];
 		for(int i{}; i < this->size; i++)
 			A[i] = new bool[this->size];
@@ -23,58 +23,42 @@ class graph {
 			for(int j = 0; j < this->size; j++)
 				A[i][j] = false;
 
-		if(range) {
+		if(this->range) {
 			Cost = new int*[size];
 			for(int i{}; i < this->size; i++)
 				Cost[i] = new int[this->size];
 			for(int i{}; i < this->size; i++)
 				for(int j{}; j < this->size; j++)
 					Cost[i][j] = 0;
-
 		}
 	}
 
-	friend ostream& operator<< (ostream& out, const graph& g) {
-		if(g.range) {
-			out<<"   ";
-			for(int i{}; i < g.size; i++)
-				out<<i<<" ";
-			out<<endl;
-
-			for(int i{}; i < g.size; i++) {
-				if(i/10 > 0) out<<i<<" ";
-				else out<<i<<"  ";
-
-				for(int j{}; j < g.size; j++) {
-					out<<g.Cost[i][j];
-					if(j/10 > 0) out<<"  ";
-					else out<<" ";
-				}
-				out<<endl;
-			}
+	friend ostream& operator << (ostream& gout, const graph& g) {
+		if(!g.size) {
+			gout<<"Graph has no nodes"<<endl;
+			return gout;
 		}
-		else {
-			out<<"   ";
-			for(int i{}; i < g.size; i++)
-				out<<i<<" ";
-			out<<endl;
+		gout<<"   ";
+		for(int i{}; i < g.size; i++)
+			gout<<i<<" ";
+		gout<<endl;
 
-			for(int i{}; i < g.size; i++) {
-				if(i/10 > 0) out<<i<<" ";
-				else out<<i<<"  ";
+		for(int i{}; i < g.size; i++) {
+			if(i/10 > 0) gout<<i<<" ";
+			else gout<<i<<"  ";
 
-				for(int j{}; j < g.size; j++) {
-					out<<static_cast<int>(g.A[i][j]);
-					if(j/10 > 0) out<<"  ";
-					else out<<" ";
-				}
-				out<<endl;
+			for(int j{}; j < g.size; j++) {
+				if(g.range) gout<<g.Cost[i][j];
+				else gout<<g.A[i][j];
+				if(j/10 > 0) gout<<"  ";
+				else gout<<" ";
 			}
+			gout<<endl;
 		}
-		return out;
-	}
+	return gout;
+}
 
-	void operator= (const graph& g2) {
+	void operator = (const graph& g2) {
 		if(this->size == g2.size && this->range == g2.range) {
 			this->A = g2.A;
 
@@ -83,15 +67,12 @@ class graph {
 			}
 		}
 		else {
-			cout<<"Illegal Assignment: Graph size and/or range don't match";
+			cout<<"Illegal Assignment: Graph size and/or range don't match"<<endl;
 			return;
 		}
 	}
 
-	void rand_graph_gen(double density) { //generates an undirected graph
-		if(density > 1) density = 1.1;
-		else if(density < 0) density = -1;
-
+	void rand_graph_gen(double density) { //generates an
 		const int rand_max = RAND_MAX;
 
 		//seeding the pseudo-random number generator
@@ -117,6 +98,25 @@ class graph {
 		}
 	}
 
+	void put_edge(const int v1, const int v2, const int cost = 0) {
+		if(cost && !this->range) {
+			cout<<"Cost Matrix doesn't exist, insertion in Adjacency Matrix done"<<endl;
+		}
+
+		if(v1 >= 0 && v2 >= 0 && v1 < this->size && v2 < this->size) {
+			this->A[v1][v2] = this->A[v2][v1] = 1;
+
+			if(this->range)
+				this->Cost[v1][v2] = this->Cost[v2][v1] = cost;
+
+			return;
+		}
+		else {
+			cout<<"Illegal Insertion: Node doesn't exist"<<endl;
+			return;
+		}
+	}
+
 	//Dijkstra's declaration
 	int* Dijkstra(int source, int destination);
 
@@ -126,17 +126,19 @@ class graph {
 	~graph() {
 		for(int i{}; i < this->size; i++) {
 			delete[] this->A[i];
-			delete[] this->Cost[i];
+			if(this->range)
+				delete[] this->Cost[i];
 		}
 		delete[] this->A;
-		delete[] this->Cost;
+		if(this->range)
+			delete[] this->Cost;
 	}
 };
 
 //Dijkstra's Shortest Path Algorithm for Unweighted graphs
 int* graph :: Dijkstra(const int src, const int dst) {
 	if(src >= this->size || dst >= this->size) {
-		cout<<"Source/Destination do not exist in the graph.\n";
+		cout<<"Source/Destination do not exist in the graph"<<endl;
 		return nullptr;
 	}
 
@@ -219,7 +221,7 @@ int* graph :: Dijkstra(const int src, const int dst) {
 	return path;
 }
 
-//Prim's Minimum Spanning Tree Algorithm (This is most likely a very bad implementation)
+//Prim's Minimum Spanning Tree Algorithm (This is most likely a very bad implementation, probably wrong too)
 graph* graph :: Prim() {
 	graph* MST = new graph(this->size, this->range);
 
