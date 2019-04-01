@@ -98,7 +98,7 @@ public:
 		}
 	}
 
-	void put_edge(const int v1, const int v2, const int cost = 0) {
+	void put_edge(const int v1, const int v2, const int cost = 1) {
 		if(cost && !this->range) {
 			cout<<"Cost Matrix doesn't exist, insertion in Adjacency Matrix done"<<endl;
 		}
@@ -120,8 +120,8 @@ public:
 	//Dijkstra's declaration
 	int* Dijkstra(int source, int destination);
 
-	//Prim's declaration
-	graph* Prim();
+	//Kruskal's declaration
+	graph* Kruskal();
 
 	~graph() {
 		for(int i{}; i < this->size; i++) {
@@ -221,8 +221,8 @@ int* graph :: Dijkstra(const int src, const int dst) {
 	return path;
 }
 
-//Prim's Minimum Spanning Tree Algorithm (This is most likely a very bad implementation, probably wrong too)
-graph* graph :: Prim() {
+//Kruskal's Minimum Spanning Tree Algorithm (This is most likely a very bad implementation)
+graph* graph :: Kruskal() {
 	graph* MST = new graph(this->size, this->range);
 
 	vector<bool> visited(this->size, false);
