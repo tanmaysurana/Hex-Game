@@ -10,10 +10,12 @@ protected:
   const int size; //size of the Hex board
   graph* hex_board; //Hex Board as a graph
   Color** color_matrix;
+  graph* blue_g;
+  graph* red_g;
 
 public:
   HexBoard(int size): size(size) {
-    this->hex_board = new graph((this->size) * (this->size), 4);  //Range is 4
+    this->hex_board = new graph((this->size) * (this->size));  //Range is 4
     int i{}, j{}; //positon of hexagon as (i, j)
     int n{}; //Node number derived from i and j (n = i*size + j)
     const int s = this->size;
@@ -78,37 +80,62 @@ public:
     for(int k = 0; k < this->size; k++)
       for(int l = 0; l < this->size; l++)
         color_matrix[k][l] = Color::WHITE;
+
+    this->blue_g = new graph((this->size) * (this->size));
+    this->red_g = new graph((this->size) * (this->size));
+  }
+
+  bool hex_move(Color c, int k, int l) {
+      if(k < 0 || k >= this->size || l < 0 || l >= this->size) {
+        cout<<"("<<k<<", "<<l<<")"<<": "<<"Illegal Move: Hexagon Doesn't Exist\n\n";
+        return false;
+      }
+      if(this->color_matrix[k][l] == Color::WHITE) {
+        this->color_matrix[k][l] = c;
+        if(this->color_matrix[k][l] == Color::BLUE) {
+          //create blue_g
+        }
+        return true;
+      }
+      else {
+        cout<<"("<<k<<", "<<l<<")"<<": "<<endl<<"Illegal Move: Hexagon is already ";
+        if(this->color_matrix[k][l] == Color::BLUE) cout<<"BLUE\n\n";
+        else cout<<"RED\n\n";
+        return false;
+      }
   }
 
   //Ostream Operator
   friend ostream& operator << (ostream& hout, const HexBoard& h) {
-    hout<<"   ";
-		for(int k{}; k < h.size; k++)
-			hout<<k<<" ";
-		hout<<endl;
-    for(int k{}; k < h.size; k++) {
-			if(k/10 > 0) hout<<k<<" ";
-			else hout<<k<<"  ";
-
-			for(int l{}; l < h.size; l++) {
-				hout<<static_cast<int>(h.color_matrix[k][l]);
-				if(l/10 > 0) hout<<"  ";
-				else hout<<" ";
-			}
-			hout<<endl;
-		}
+    const int sz = h.size;
+    int k = sz;
+    int l = 0;
+    int n{};
+    for(int i = 1; i <= 2*sz - 1; i++) {
+      if(i <= sz) {
+        k = sz - i;
+        l = 0;
+      }
+      else {
+        k = 0;
+        l = i - sz;
+      }
+      n = i>sz?(i-sz):(sz-i);
+      for(int s = 1; s <= n; s++) {
+        if(i == 1 && s == sz/2) hout<<"RED(2) ";
+        else if(i == 2*sz - 1 && s == sz/2) hout<<"BLUE(3)";
+        else hout<<"       ";
+      }
+      n = i>sz?(2*sz-i):i;
+      for(int j = 1; j <= n; j++) {
+        hout<<"("<<k<<","<<l<<"):"<<static_cast<int>(h.color_matrix[k][l]);
+        hout<<"       ";
+        k++;
+        l++;
+      }
+      hout<<endl;
+    }
     return hout;
   }
 
-  void hex_move(Color c, int k, int l) {
-    if(this->color_matrix[k][l] == Color::WHITE) {
-      this->color_matrix[k][l] = c;
-    }
-    else {
-      cout<<endl<<"Illegal Move: Hexagon is already ";
-      if(this->color_matrix[k][l] == Color::BLUE) cout<<"BLUE\n";
-      else cout<<"RED\n";
-      return;
-    }
-  }
 };

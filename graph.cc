@@ -98,7 +98,7 @@ public:
 		}
 	}
 
-	void put_edge(const int v1, const int v2, const int cost = 1) {
+	bool put_edge(const int v1, const int v2, const int cost = 0) {
 		if(cost && !this->range) {
 			cout<<"Cost Matrix doesn't exist, insertion in Adjacency Matrix done"<<endl;
 		}
@@ -109,12 +109,17 @@ public:
 			if(this->range)
 				this->Cost[v1][v2] = this->Cost[v2][v1] = cost;
 
-			return;
+			return true;
 		}
 		else {
 			cout<<"Illegal Insertion: Node doesn't exist"<<endl;
-			return;
+			return false;
 		}
+	}
+
+	bool if_edge(const int v1, const int v2) {
+		if(this->A[v1][v2]) return true;
+		else return false;
 	}
 
 	//Dijkstra's declaration
