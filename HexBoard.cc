@@ -90,10 +90,114 @@ public:
         cout<<"("<<k<<", "<<l<<")"<<": "<<"Illegal Move: Hexagon Doesn't Exist\n\n";
         return false;
       }
+      const int s = this->size;
+      int n = 0;
       if(this->color_matrix[k][l] == Color::WHITE) {
         this->color_matrix[k][l] = c;
         if(this->color_matrix[k][l] == Color::BLUE) {
-          //create blue_g
+          n = k*s + l;
+          if(k == 0 && l == 0) { //Corner Hexagon
+            if(this->color_matrix[k+1][l] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k][l+1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l+1));
+          }
+          else if(k == 0 && l == s-1) { //Corner Hexagon
+            if(this->color_matrix[k][l-1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k+1][l-1] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + (l-1));
+            if(this->color_matrix[k+1][l] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + l);
+          }
+          else if(k == s-1 && l == 0) { //Corner Hexagon
+            if(this->color_matrix[k-1][l] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k-1][l+1] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + (l+1));
+            if(this->color_matrix[k][l+1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l+1));
+          }
+          else if(k == s-1 && l == s-1) { //Corner Hexagon
+            if(this->color_matrix[k-1][l] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k][l-1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l-1));
+          }
+          else if(k == 0) { //Edge Hexagon
+            if(this->color_matrix[k][l-1] == Color::BLUE) this->blue_g->put_edge(n, (k*s + (l-1)));
+            if(this->color_matrix[k][l+1] == Color::BLUE) this->blue_g->put_edge(n, (k*s + (l+1)));
+            if(this->color_matrix[k+1][l-1] == Color::BLUE) this->blue_g->put_edge(n, ((k+1)*s + (l-1)));
+            if(this->color_matrix[k+1][l] == Color::BLUE) this->blue_g->put_edge(n, ((k+1)*s + l));
+          }
+          else if(k == s-1) { //Edge Hexagon
+            if(this->color_matrix[k][l-1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k][l+1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l+1));
+            if(this->color_matrix[k-1][l] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k-1][l+1] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + (l+1));
+          }
+          else if(l == 0) { //Edge Hexagon
+            if(this->color_matrix[k-1][l] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k+1][l] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k-1][l+1] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + (l+1));
+            if(this->color_matrix[k][l+1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l+1));
+          }
+          else if(l == s-1) { //Edge Hexagon
+            if(this->color_matrix[k-1][l] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k+1][l] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k][l-1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k+1][l-1] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + (l-1));
+          }
+          else { //Internal Hexagon
+            if(this->color_matrix[k+1][l] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k-1][l] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k][l-1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k+1][l-1] == Color::BLUE) this->blue_g->put_edge(n, (k+1)*s + (l-1));
+            if(this->color_matrix[k][l+1] == Color::BLUE) this->blue_g->put_edge(n, k*s + (l+1));
+            if(this->color_matrix[k-1][l+1] == Color::BLUE) this->blue_g->put_edge(n, (k-1)*s + (l+1));
+          }
+        }
+        else if(this->color_matrix[k][l] == Color::RED) {
+          if(k == 0 && l == 0) { //Corner Hexagon
+            if(this->color_matrix[k+1][l] == Color::RED) this->red_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k][l+1] == Color::RED) this->red_g->put_edge(n, k*s + (l+1));
+          }
+          else if(k == 0 && l == s-1) { //Corner Hexagon
+            if(this->color_matrix[k][l-1] == Color::RED) this->red_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k+1][l-1] == Color::RED) this->red_g->put_edge(n, (k+1)*s + (l-1));
+            if(this->color_matrix[k+1][l] == Color::RED) this->red_g->put_edge(n, (k+1)*s + l);
+          }
+          else if(k == s-1 && l == 0) { //Corner Hexagon
+            if(this->color_matrix[k-1][l] == Color::RED) this->red_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k-1][l+1] == Color::RED) this->red_g->put_edge(n, (k-1)*s + (l+1));
+            if(this->color_matrix[k][l+1] == Color::RED) this->red_g->put_edge(n, k*s + (l+1));
+          }
+          else if(k == s-1 && l == s-1) { //Corner Hexagon
+            if(this->color_matrix[k-1][l] == Color::RED) this->red_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k][l-1] == Color::RED) this->red_g->put_edge(n, k*s + (l-1));
+          }
+          else if(k == 0) { //Edge Hexagon
+            if(this->color_matrix[k][l-1] == Color::RED) this->red_g->put_edge(n, (k*s + (l-1)));
+            if(this->color_matrix[k][l+1] == Color::RED) this->red_g->put_edge(n, (k*s + (l+1)));
+            if(this->color_matrix[k+1][l-1] == Color::RED) this->red_g->put_edge(n, ((k+1)*s + (l-1)));
+            if(this->color_matrix[k+1][l] == Color::RED) this->red_g->put_edge(n, ((k+1)*s + l));
+          }
+          else if(k == s-1) { //Edge Hexagon
+            if(this->color_matrix[k][l-1] == Color::RED) this->red_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k][l+1] == Color::RED) this->red_g->put_edge(n, k*s + (l+1));
+            if(this->color_matrix[k-1][l] == Color::RED) this->red_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k-1][l+1] == Color::RED) this->red_g->put_edge(n, (k-1)*s + (l+1));
+          }
+          else if(l == 0) { //Edge Hexagon
+            if(this->color_matrix[k-1][l] == Color::RED) this->red_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k+1][l] == Color::RED) this->red_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k-1][l+1] == Color::RED) this->red_g->put_edge(n, (k-1)*s + (l+1));
+            if(this->color_matrix[k][l+1] == Color::RED) this->red_g->put_edge(n, k*s + (l+1));
+          }
+          else if(l == s-1) { //Edge Hexagon
+            if(this->color_matrix[k-1][l] == Color::RED) this->red_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k+1][l] == Color::RED) this->red_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k][l-1] == Color::RED) this->red_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k+1][l-1] == Color::RED) this->red_g->put_edge(n, (k+1)*s + (l-1));
+          }
+          else { //Internal Hexagon
+            if(this->color_matrix[k+1][l] == Color::RED) this->red_g->put_edge(n, (k+1)*s + l);
+            if(this->color_matrix[k-1][l] == Color::RED) this->red_g->put_edge(n, (k-1)*s + l);
+            if(this->color_matrix[k][l-1] == Color::RED) this->red_g->put_edge(n, k*s + (l-1));
+            if(this->color_matrix[k+1][l-1] == Color::RED) this->red_g->put_edge(n, (k+1)*s + (l-1));
+            if(this->color_matrix[k][l+1] == Color::RED) this->red_g->put_edge(n, k*s + (l+1));
+            if(this->color_matrix[k-1][l+1] == Color::RED) this->red_g->put_edge(n, (k-1)*s + (l+1));
+          }
         }
         return true;
       }
@@ -104,6 +208,31 @@ public:
         return false;
       }
   }
+
+  Color who_won() {
+  int* p;
+  for(int k1 = 0; k1 < this->size; k1++) {
+    if(this->color_matrix[k1][0] == Color::RED) {
+      for(int k2 = 0; k2 < this->size; k2++) {
+        if(this->color_matrix[k2][this->size - 1] == Color::RED) {
+          p = this->red_g->Dijkstra(k1*this->size, k2*this->size + this->size - 1);
+          if(p != nullptr) return Color::RED;
+        }
+      }
+    }
+  }
+  for(int l1 = 0; l1 < this->size; l1++) {
+    if(this->color_matrix[0][l1] == Color::BLUE) {
+      for(int l2 = 0; l2 < this->size; l2++) {
+        if(this->color_matrix[this->size - 1][l2] == Color::BLUE) {
+          p = this->blue_g->Dijkstra(l1, (this->size - 1)*this->size + l2);
+          if(p != nullptr) return Color::BLUE;
+        }
+      }
+    }
+  }
+  return Color::WHITE;
+}
 
   //Ostream Operator
   friend ostream& operator << (ostream& hout, const HexBoard& h) {

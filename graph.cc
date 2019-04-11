@@ -202,7 +202,6 @@ int* graph :: Dijkstra(const int src, const int dst) {
 		}
 
 		if(compute == computed_last && compute != dst) {
-			cout<<endl<<dst<<" is not reachable."<<endl;
 			return nullptr;
 		}
 	}
