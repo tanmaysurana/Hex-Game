@@ -94,6 +94,7 @@ public:
       int n = 0;
       if(this->color_matrix[k][l] == Color::WHITE) {
         this->color_matrix[k][l] = c;
+        //To build the blue_g and red_g matrices with every move
         if(this->color_matrix[k][l] == Color::BLUE) {
           n = k*s + l;
           if(k == 0 && l == 0) { //Corner Hexagon
@@ -209,6 +210,7 @@ public:
       }
   }
 
+  //Applies Dijkstra's Algorithm to check if a path exists between the blue edges or the red edges
   Color who_won() {
   int* p;
   for(int k1 = 0; k1 < this->size; k1++) {
@@ -234,7 +236,7 @@ public:
   return Color::WHITE;
 }
 
-  //Ostream Operator
+  //Ostream Operator (Prints a rhombus with the indices of each hexagon, and its current color)
   friend ostream& operator << (ostream& hout, const HexBoard& h) {
     const int sz = h.size;
     int k = sz;
