@@ -8,78 +8,20 @@ class HexBoard: public graph {
 
 protected:
   const int size; //size of the Hex board
-  graph* hex_board; //Hex Board as a graph
   Color** color_matrix;
   graph* blue_g;
   graph* red_g;
 
 public:
   HexBoard(int size): size(size) {
-    this->hex_board = new graph((this->size) * (this->size));  //Range is 4
     int i{}, j{}; //positon of hexagon as (i, j)
     int n{}; //Node number derived from i and j (n = i*size + j)
-    const int s = this->size;
-    for(i = 0; i < s; i++) {
-      for(j = 0; j < s; j++) {
-        n = i*s + j;
-        if(i == 0 && j == 0) { //Corner Hexagon
-          this->hex_board->put_edge(n, (i+1)*s + j);
-          this->hex_board->put_edge(n, i*s + (j+1));
-        }
-        else if(i == 0 && j == s-1) { //Corner Hexagon
-          this->hex_board->put_edge(n, i*s + (j-1));
-          this->hex_board->put_edge(n, (i+1)*s + (j-1));
-          this->hex_board->put_edge(n, (i+1)*s + j);
-        }
-        else if(i == s-1 && j == 0) { //Corner Hexagon
-          this->hex_board->put_edge(n, (i-1)*s + j);
-          this->hex_board->put_edge(n, (i-1)*s + (j+1));
-          this->hex_board->put_edge(n, i*s + (j+1));
-        }
-        else if(i == s-1 && j == s-1) { //Corner Hexagon
-          this->hex_board->put_edge(n, (i-1)*s + j);
-          this->hex_board->put_edge(n, i*s + (j-1));
-        }
-        else if(i == 0) { //Edge Hexagon
-          this->hex_board->put_edge(n, (i*s + (j-1)));
-          this->hex_board->put_edge(n, (i*s + (j+1)));
-          this->hex_board->put_edge(n, ((i+1)*s + (j-1)));
-          this->hex_board->put_edge(n, ((i+1)*s + j));
-        }
-        else if(i == s-1) { //Edge Hexagon
-          this->hex_board->put_edge(n, i*s + (j-1));
-          this->hex_board->put_edge(n, i*s + (j+1));
-          this->hex_board->put_edge(n, (i-1)*s + j);
-          this->hex_board->put_edge(n, (i-1)*s + (j+1));
-        }
-        else if(j == 0) { //Edge Hexagon
-          this->hex_board->put_edge(n, (i-1)*s + j);
-          this->hex_board->put_edge(n, (i+1)*s + j);
-          this->hex_board->put_edge(n, (i-1)*s + (j+1));
-          this->hex_board->put_edge(n, i*s + (j+1));
-        }
-        else if(j == s-1) { //Edge Hexagon
-          this->hex_board->put_edge(n, (i-1)*s + j);
-          this->hex_board->put_edge(n, (i+1)*s + j);
-          this->hex_board->put_edge(n, i*s + (j-1));
-          this->hex_board->put_edge(n, (i+1)*s + (j-1));
-        }
-        else { //Internal Hexagon
-          this->hex_board->put_edge(n, (i+1)*s + j);
-          this->hex_board->put_edge(n, (i-1)*s + j);
-          this->hex_board->put_edge(n, i*s + (j-1));
-          this->hex_board->put_edge(n, (i+1)*s + (j-1));
-          this->hex_board->put_edge(n, i*s + (j+1));
-          this->hex_board->put_edge(n, (i-1)*s + (j+1));
-        }
-      }
-    }
 
-    color_matrix = new Color*[this->size];
-    for(int k = 0; k < this->size; k++) color_matrix[k] = new Color[this->size];
+    this->color_matrix = new Color*[this->size];
+    for(int k = 0; k < this->size; k++) this->color_matrix[k] = new Color[this->size];
     for(int k = 0; k < this->size; k++)
       for(int l = 0; l < this->size; l++)
-        color_matrix[k][l] = Color::WHITE;
+        this->color_matrix[k][l] = Color::WHITE;
 
     this->blue_g = new graph((this->size) * (this->size));
     this->red_g = new graph((this->size) * (this->size));
@@ -202,12 +144,30 @@ public:
         }
         return true;
       }
-      else {
-        cout<<"("<<k<<", "<<l<<")"<<": "<<endl<<"Illegal Move: Hexagon is already ";
-        if(this->color_matrix[k][l] == Color::BLUE) cout<<"BLUE\n\n";
-        else cout<<"RED\n\n";
-        return false;
+      else return false;
+
+  }
+
+  void swap_move() {
+    const int s = this->size - 1;
+    bool flag = false;
+    for(int i = 0; i <= s; i++) {
+      for(int j = 0; j <= s; j++) {
+        if(this->color_matrix[i][j] == Color::BLUE) {
+          this->color_matrix[i][j] = Color::WHITE;
+          this->color_matrix[j][i] = Color::RED;
+          flag = true;
+          break;
+        }
+        else if(this->color_matrix[i][j] == Color::RED) {
+          this->color_matrix[i][j] = Color::WHITE;
+          this->color_matrix[j][i] = Color::BLUE;
+          flag = true;
+          break;
+        }
       }
+      if(flag) break;
+    }
   }
 
   //Applies Dijkstra's Algorithm to check if a path exists between the blue edges or the red edges
@@ -233,7 +193,7 @@ public:
       }
     }
   }
-  return Color::WHITE;
+  return Color::WHITE; //returns white if nobody won yet
 }
 
   //Ostream Operator (Prints a rhombus with the indices of each hexagon, and its current color)
@@ -269,4 +229,17 @@ public:
     return hout;
   }
 
+  void operator = (const HexBoard& H) {
+    if(this->size == H.size) {
+      this->blue_g = H.blue_g;
+      this->red_g = H.red_g;
+      for(int i = 0; i < this->size; i++) {
+        for(int j = 0; j < this->size; j++) {
+          this->color_matrix[i][j] = H.color_matrix[i][j];
+        }
+      }
+    }
+  }
+
+  friend class HexPlayer;
 };

@@ -8,6 +8,7 @@
 using namespace std;
 
 class graph {
+	
 protected:
 	const int size; //Number of Vertices
 	bool** A; //Adjacency matrix
@@ -60,10 +61,11 @@ public:
 
 	void operator = (const graph& g2) {
 		if(this->size == g2.size && this->range == g2.range) {
-			this->A = g2.A;
-
-			if(this->range) {
-				this->Cost = g2.Cost;
+			for(int i = 0; i < this->size; i++) {
+				for(int j = 0; j < this->size; j++) {
+					this->A[i][j] = g2.A[i][j];
+					if(this->range) this->Cost[i][j] = g2.Cost[i][j];
+				}
 			}
 		}
 		else {
