@@ -1,73 +1,144 @@
-//Write an AI that plays HEX
 #include "HexBoard.cc"
-#include <random>
 
 using namespace std;
-//COM is always RED
+
+inline int rand_in_range(int a, int b) {
+  double num = RAND_MAX/(b-a+1);
+  int r = rand();
+  int i;
+  for(i = 0; r > i*num; i++);
+  i--;
+  return i;
+}
+
 class HexPlayer {
 
-public:
-  HexPlayer(){}
+protected:
+  const Color color;
 
-  bool red_won(const HexBoard& H) {
+public:
+  HexPlayer(Color c): color(c){}
+
+  bool com_won(const HexBoard& H) {
     int* p;
-    for(int k1 = 0; k1 < H.size; k1++) {
-      if(H.color_matrix[k1][0] == Color::RED) {
-        for(int k2 = 0; k2 < H.size; k2++) {
-          if(H.color_matrix[k2][H.size - 1] == Color::RED) {
-            p = H.red_g->Dijkstra(k1*H.size, k2*H.size + H.size - 1);
-            if(p != nullptr) return true;
+    bool flag = false;
+    const int s = H.size;
+    if(this->color == Color::RED) {
+      for(int k1 = 0; k1 < s; k1++) {
+        if(H.color_matrix[k1][0] != Color::RED) continue;
+        for(int k2 = 0; k2 < s; k2++) {
+          if(H.color_matrix[k2][s-1] != Color::RED) continue;
+          p = H.red_g->Dijkstra(k1*s + 0, k2*s + (s-1));
+          if(p) {
+            flag = true;
+            delete[] p;
           }
+          if(flag) return true;
         }
       }
+      return false;
     }
-    return false;
+    else if(this->color == Color::BLUE){
+      for(int l1 = 0; l1 < s; l1++) {
+        if(H.color_matrix[0][l1] != Color::RED) continue;
+        for(int l2 = 0; l2 < s; l2++) {
+          if(H.color_matrix[s-1][l2] != Color::RED) continue;
+          p = H.blue_g->Dijkstra(0*s + l1, (s-1)*s + l2);
+          if(p) {
+            flag = true;
+            delete[] p;
+          }
+          if(flag) return true;
+        }
+      }
+      return false;
+    }
   }
 
-  void make_rand_move(HexBoard& B, Color c) {
-    random_device rd;
-    mt19937 mt(rd());
-    uniform_int_distribution<int> dist(0, B.size - 1);
+  void make_rand_move(HexBoard& B) {
     int k, l;
     do {
-      k = dist(mt);
-      l = dist(mt);
-    } while(!B.hex_move(c, k, l));
+      k = rand_in_range(0, B.size - 1);
+      l = rand_in_range(0, B.size - 1);
+    } while(!B.hex_move(this->color, k, l));
   }
 
-  pair<int, int>* give_move(const HexBoard& H) {
-    const int num_sim = 100;
-    int max = 0;
+  pair<int, int>* give_move(const HexBoard& H, const int num_sims = 1000, const bool swap = false) {
+    int win_count = 0, k = 0, l = 0;
+    int max_wins = 0;
+    cout<<"\nComputing...\n";
     HexBoard B(H.size);
-    B = H;
     const int s = B.size;
-    int win_count = 0;
-    int k = 0, l = 0;
-    cout<<endl<<"Computing...";
+    int count_white = 0; //number of colored hexes;
+    for(int i = 0; i < s; i++)
+      for(int j = 0; j < s; j++)
+        if(H.color_matrix[i][j] == Color::WHITE) count_white++;
+    int c_w = 0;
+    const Color c = this->color;
+    const Color b = (c == Color::RED ? Color::BLUE : Color::RED);
     for(int i = 0; i < s; i++) {
       for(int j = 0; j < s; j++) {
-        B = H;
-        if(B.color_matrix[i][j] == Color::WHITE) {
-          B.hex_move(Color::RED, i, j);
+        if(H.color_matrix[i][j] == Color::WHITE) {
           win_count = 0;
-          for(int n = 0; n < num_sim; n++) {
-            for(int m = 0; m <= s*s/2; m++) {
-              this->make_rand_move(B, Color::BLUE);
-              this->make_rand_move(B, Color::RED);
+          for(int n = 0; n < num_sims; n++) {
+            B = H;
+            c_w = count_white;
+            B.hex_move(c, i, j);
+            c_w--;
+            for(int m = 0; m < s*s; m+=2) {
+              this->make_rand_move(B, b);
+              c_w--;
+              if(c_w == 0) break;
+              this->make_rand_move(B, c);
+              c_w--;
+              if(c_w == 0) break;
             }
-            if(this->red_won(B)) win_count++;
+
+            if(com_won(B, c)) win_count++;
+
           }
-          if(win_count > max) {
-            max = win_count;
-            k = i;
-            l = j;
+          cout<<win_count<<endl;
+          if(win_count >= max_wins) {
+            if(win_count == max_wins) { //coin toss to pick (k, l)
+              if(rand() > (RAND_MAX*1.0)/2) {
+                k = i;
+                l = j;
+              }
+            }
+            else {
+              max_wins = win_count;
+              k = i;
+              l = j;
+            }
           }
         }
       }
     }
-    pair<int, int>* p;
-    p->first = k;
-    p->second = l;
+
+    //to simaulate game with swap move
+    win_count = 0;
+    for(int n = 0; n < num_sims; n++) {
+      B = H;
+      c_w = count_white;
+      B.swap_move();
+      c_w--;
+      for(int m = 0; m < s*s; m+=2) {
+        this->make_rand_move(B, b);
+        c_w--;
+        if(c_w == 0) break;
+        this->make_rand_move(B, c);
+        c_w--;
+        if(c_w == 0) break;
+      }
+      if(com_won(B, c)) win_count++;
+    }
+    if(win_count >= max_wins) {
+      pair<int, int>* p = new pair<int, int>(-1, -1); //swap_move is the best move, return pair as (-1, -1)
+      return p;
+    }
+
+
+    pair<int, int>* p = new pair<int, int>(k, l);
     return p;
   }
 

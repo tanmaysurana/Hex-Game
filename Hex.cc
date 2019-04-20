@@ -1,26 +1,22 @@
 #include "HexPlayer.cc"
-////////////////////
+
 using namespace std;
 
 int main()
 {
-  HexBoard H(5);
-  HexPlayer h;
-  int k, l;
-  pair<int, int>* com_move;
-  Color c;
-  cout<<H;
-  /*do {
-    cin>>k>>l;
-    H.hex_move(Color::BLUE, k, l);
-    cout<<endl<<H;
-    com_move = h.give_move(H);
-    H.hex_move(Color::RED, com_move.first, com_move.second);
-    cout<<endl<<H;
-  } while(c == Color::WHITE);
-  cout<<endl<<static_cast<int>(c)<<" WON!";*/
+  srand(time(nullptr));
+  int board_size;
+  cout<<"Board Size: ";
+  cin>>board_size;
+  HexBoard H(board_size);
+  char b, r;
+  cout<<"Enter H for Human and C for Computer"
+  cout<<"BLUE Player: ";
+  cin>>b;
+  cout<<"RED Player: ";
+  cin>>r;
+  if((b == 'C' || b == 'c) && (r == 'C' || r == 'c')) {
+    HexBoard h1
+  }
 
-  com_move = h.give_move(H);
-  H.hex_move(Color::RED, com_move->first, com_move->second);
-  cout<<endl<<H;
 }

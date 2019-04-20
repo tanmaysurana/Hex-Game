@@ -8,7 +8,7 @@
 using namespace std;
 
 class graph {
-	
+
 protected:
 	const int size; //Number of Vertices
 	bool** A; //Adjacency matrix
@@ -119,7 +119,7 @@ public:
 		}
 	}
 
-	bool if_edge(const int v1, const int v2) {
+	bool edge_exists(const int v1, const int v2) {
 		if(this->A[v1][v2]) return true;
 		else return false;
 	}
@@ -204,6 +204,9 @@ int* graph :: Dijkstra(const int src, const int dst) {
 		}
 
 		if(compute == computed_last && compute != dst) {
+			delete[] node_info[0];
+			delete[] node_info[1];
+			delete[] is_computed;
 			return nullptr;
 		}
 	}
