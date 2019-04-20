@@ -35,10 +35,8 @@ public:
   }
 
   bool hex_move(Color c, int k, int l) {
-    if(k < 0 || k >= this->size || l < 0 || l >= this->size) {
-      cout<<"("<<k<<", "<<l<<")"<<": "<<"Illegal Move: Hexagon Doesn't Exist\n\n";
-      return false;
-    }
+    if(k < 0 || k >= this->size || l < 0 || l >= this->size) return false;
+
     const int s = this->size;
     int n = k*s + l;
     if(this->color_matrix[k][l] == Color::WHITE) this->color_matrix[k][l] = c;
@@ -219,9 +217,9 @@ public:
       char c;
       n = i>sz?(2*sz-i):i;
       for(int j = 1; j <= n; j++) {
-        if(color_matrix[k][l] == Color::RED) c = 'R';
-        else if(color_matrix[k][l] == Color::BLUE) c = 'B';
-        else c = '0';
+        if(h.color_matrix[k][l] == Color::RED) c = 'R';
+        else if(h.color_matrix[k][l] == Color::BLUE) c = 'B';
+        else c = '_';
         hout<<"("<<k<<","<<l<<"):"<<c;
         hout<<"       ";
         k++;
