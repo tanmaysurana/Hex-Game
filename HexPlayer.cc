@@ -117,7 +117,7 @@ public:
     return p;
   }
 
-  pair<int, int>* give_move(const HexBoard& H, const int num_sims = 1000, const bool swap = false) {
+  pair<int, int>* give_move(const HexBoard& H, const bool swap = false, const int num_sims = 1000) {
     int win_count = 0, k = 0, l = 0;
     int max_wins = 0;
     cout<<"\nComputing...\n";

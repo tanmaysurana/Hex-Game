@@ -24,15 +24,15 @@ int main()
     HexPlayer h1(Color::RED);
     HexPlayer h2(Color::BLUE);
     pair<int, int>* com_move;
-    com_move = h1.give_first_move(H, 1000);
+    com_move = h1.give_first_move(H);
     H.hex_move(h1.color, com_move->first, com_move->second);
     cout<<endl<<H<<endl;
-    com_move = h2.give_move(H, 1000, true);
+    com_move = h2.give_move(H, true);
     if(com_move->first == -1 && com_move->second == -1) H.swap_move();
     else H.hex_move(h2.color, com_move->first, com_move->second);
     cout<<endl<<H<<endl;
     while(true){
-      com_move = h1.give_move(H, 1000);
+      com_move = h1.give_move(H);
       H.hex_move(h1.color, com_move->first, com_move->second);
       cout<<endl<<H<<endl;
       c = H.who_won();
@@ -45,7 +45,7 @@ int main()
         break;
       }
 
-      com_move = h2.give_move(H, 1000);
+      com_move = h2.give_move(H);
       H.hex_move(h2.color, com_move->first, com_move->second);
       cout<<endl<<H<<endl;
       c = H.who_won();
@@ -67,7 +67,7 @@ int main()
     pair<int, int>* com_move;
     int k, l;
     if(h.color == Color::RED) {
-      com_move = h.give_first_move(H, 1000);
+      com_move = h.give_first_move(H);
       H.hex_move(h.color, com_move->first, com_move->second);
       cout<<endl<<H<<endl;
       char swap;
@@ -80,7 +80,7 @@ int main()
       }
       cout<<endl<<H<<endl;
       while(true) {
-        com_move = h.give_move(H, 1000);
+        com_move = h.give_move(H);
         H.hex_move(h.color, com_move->first, com_move->second);
         cout<<endl<<H<<endl;
         c = H.who_won();
@@ -110,7 +110,7 @@ int main()
       cin>>k>>l;
       while(!H.hex_move(hu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
       cout<<endl<<H<<endl;
-      com_move = h.give_move(H, 1000, true);
+      com_move = h.give_move(H, true);
       if(com_move->first == -1 && com_move->second == -1) H.swap_move();
       else H.hex_move(h.color, com_move->first, com_move->second);
       cout<<endl<<H<<endl;
@@ -127,7 +127,7 @@ int main()
           cout<<"BLUE WON!"<<endl;
           break;
         }
-        com_move = h.give_move(H, 1000);
+        com_move = h.give_move(H);
         H.hex_move(h.color, com_move->first, com_move->second);
         cout<<endl<<H<<endl;
         c = H.who_won();
