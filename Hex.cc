@@ -1,7 +1,7 @@
 #include "HexPlayer.cc"
 
 using namespace std;
-//
+
 int main()
 {
 
@@ -68,6 +68,7 @@ int main()
     HexPlayer h(c);
     Color hu = (h.color == Color::RED) ? Color::BLUE : Color::RED;
     pair<int, int>* com_move;
+    char ck, cl;
     int k, l;
     if(h.color == Color::RED) {
       com_move = h.give_first_move(H, num_sims);
@@ -78,8 +79,15 @@ int main()
       cin>>swap;
       if(swap == 'y' || swap == 'Y') H.swap_move();
       else {
-        cin>>k>>l;
-        while(!H.hex_move(hu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+        cin>>ck>>cl;
+        k = ck - '0';
+        l = cl - '0';
+        while(!H.hex_move(hu, k, l)) {
+          cout<<"Illegal Move, try again\n";
+          cin>>ck>>cl;
+          k = ck - '0';
+          l = cl - '0';
+        }
       }
       cout<<endl<<H<<endl;
       while(true) {
@@ -95,8 +103,15 @@ int main()
           cout<<"BLUE WON!"<<endl;
           break;
         }
-        cin>>k>>l;
-        while(!H.hex_move(hu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+        cin>>ck>>cl;
+        k = ck - '0';
+        l = ck - '0';
+        while(!H.hex_move(hu, k, l)) {
+          cout<<"Illegal Move, try again\n";
+          cin>>ck>>cl;
+          k = ck - '0';
+          l = cl - '0';
+        }
         cout<<endl<<H<<endl;
         c = H.who_won();
         if(c == Color::RED) {
@@ -110,16 +125,30 @@ int main()
       }
     }
     else if(hu == Color::RED) {
-      cin>>k>>l;
-      while(!H.hex_move(hu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+      cin>>ck>>cl;
+      k = ck - '0';
+      l = cl - '0';
+      while(!H.hex_move(hu, k, l)) {
+        cout<<"Illegal Move, try again\n";
+        cin>>ck>>cl;
+        k = ck - '0';
+        l = cl - '0';
+      }
       cout<<endl<<H<<endl;
       com_move = h.give_move(H, true, num_sims);
       if(com_move->first == -1 && com_move->second == -1) H.swap_move();
       else H.hex_move(h.color, com_move->first, com_move->second);
       cout<<endl<<H<<endl;
       while(true) {
-        cin>>k>>l;
-        while(!H.hex_move(hu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+        cin>>ck>>cl;
+        k = ck - '0';
+        l = cl - '0';
+        while(!H.hex_move(hu, k, l)) {
+          cout<<"Illegal Move, try again\n";
+          cin>>ck>>cl;
+          k = ck - '0';
+          l = cl - '0';
+        }
         cout<<endl<<H<<endl;
         c = H.who_won();
         if(c == Color::RED) {
@@ -146,24 +175,46 @@ int main()
     }
   }
   else {
+    char ck, cl;
     int k, l;
     Color rhu = Color::RED;
     Color bhu = Color::BLUE;
-    cin>>k>>l;
-    while(!H.hex_move(rhu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+    cin>>ck>>cl;
+    k = ck - '0';
+    l = cl - '0';
+    while(!H.hex_move(rhu, k, l)) {
+      cout<<"Illegal Move, try again\n";
+      cin>>ck>>cl;
+      k = ck - '0';
+      l = cl - '0';
+    }
     cout<<endl<<H<<endl;
     cout<<"Swap Move? (y/n): ";
     char swap;
     cin>>swap;
     if(swap == 'y' || swap == 'Y') H.swap_move();
     else {
-      cin>>k>>l;
-      while(!H.hex_move(bhu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+      cin>>ck>>cl;
+      k = ck - '0';
+      l = cl - '0';
+      while(!H.hex_move(bhu, k, l)) {
+        cout<<"Illegal Move, try again\n";
+        cin>>ck>>cl;
+        k = ck - '0';
+        l = cl - '0';
+      }
     }
     cout<<endl<<H<<endl;
     while(true) {
-      cin>>k>>l;
-      while(!H.hex_move(rhu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+      cin>>ck>>cl;
+      k = ck - '0';
+      l = cl - '0';
+      while(!H.hex_move(rhu, k, l)) {
+        cout<<"Illegal Move, try again\n";
+        cin>>ck>>cl;
+        k = ck - '0';
+        l = cl - '0';
+      }
       cout<<endl<<H<<endl;
       c = H.who_won();
       if(c == Color::RED) {
@@ -174,8 +225,15 @@ int main()
         cout<<"BLUE WON!"<<endl;
         break;
       }
-      cin>>k>>l;
-      while(!H.hex_move(bhu, k, l)) { cout<<"Illegal Move, try again\n"; cin>>k>>l; }
+      cin>>ck>>cl;
+      k = ck - '0';
+      l = cl - '0';
+      while(!H.hex_move(bhu, k, l)) {
+        cout<<"Illegal Move, try again\n";
+        cin>>ck>>cl;
+        k = ck - '0';
+        l = cl - '0';
+      }
       cout<<endl<<H<<endl;
       c = H.who_won();
       if(c == Color::RED) {
