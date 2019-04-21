@@ -78,12 +78,15 @@ public:
       for(int j = 0; j < s; j++) {
         if(H.color_matrix[i][j] == Color::WHITE) {
           win_count = 0;
-          for(int n = 0; n < num_sims; n++) {
+          for(int n = 0; n < 2*num_sims; n++) {
             B = H;
             c_w = count_white;
             B.hex_move(c, i, j);
             c_w--;
-            B.swap_move();
+            if(rand() > (RAND_MAX*1.0)/2)
+              B.swap_move();
+            else
+              this->make_rand_move(B, b);
             c_w--;
             for(int m = 0; m < s*s; m+=2) {
               this->make_rand_move(B, c);
@@ -97,6 +100,7 @@ public:
             if(this->com_won(B)) win_count++;
 
           }
+          cout<<win_count<<endl;
           if(win_count >= max_wins) {
             if(win_count == max_wins) { //coin toss to pick (k, l)
               if(rand() > (RAND_MAX*1.0)/2) {
