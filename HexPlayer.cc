@@ -100,7 +100,7 @@ public:
             if(this->com_won(B)) win_count++;
 
           }
-          cout<<win_count<<endl;
+         
           if(win_count >= max_wins) {
             if(win_count == max_wins) { //coin toss to pick (k, l)
               if(rand() > (RAND_MAX*1.0)/2) {
