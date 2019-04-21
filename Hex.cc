@@ -105,7 +105,7 @@ int main()
         }
         cin>>ck>>cl;
         k = ck - '0';
-        l = ck - '0';
+        l = cl - '0';
         while(!H.hex_move(hu, k, l)) {
           cout<<"Illegal Move, try again\n";
           cin>>ck>>cl;
