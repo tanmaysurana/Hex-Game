@@ -35,7 +35,7 @@ int main()
     else H.hex_move(h2.color, com_move->first, com_move->second);
     cout<<endl<<H<<endl;
     while(true){
-      com_move = h1.give_move(H, num_sims);
+      com_move = h1.give_move(H, false, num_sims);
       H.hex_move(h1.color, com_move->first, com_move->second);
       cout<<endl<<H<<endl;
       c = H.who_won();
@@ -48,7 +48,7 @@ int main()
         break;
       }
 
-      com_move = h2.give_move(H, num_sims);
+      com_move = h2.give_move(H, false, num_sims);
       H.hex_move(h2.color, com_move->first, com_move->second);
       cout<<endl<<H<<endl;
       c = H.who_won();
@@ -91,7 +91,7 @@ int main()
       }
       cout<<endl<<H<<endl;
       while(true) {
-        com_move = h.give_move(H, num_sims);
+        com_move = h.give_move(H, false, num_sims);
         H.hex_move(h.color, com_move->first, com_move->second);
         cout<<endl<<H<<endl;
         c = H.who_won();
@@ -159,7 +159,7 @@ int main()
           cout<<"BLUE WON!"<<endl;
           break;
         }
-        com_move = h.give_move(H, num_sims);
+        com_move = h.give_move(H, false, num_sims);
         H.hex_move(h.color, com_move->first, com_move->second);
         cout<<endl<<H<<endl;
         c = H.who_won();
