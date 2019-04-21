@@ -28,10 +28,9 @@ public:
           if(H.color_matrix[k2][s-1] != Color::RED) continue;
           p = H.red_g->Dijkstra(k1*s + 0, k2*s + (s-1));
           if(p) {
-            flag = true;
             delete[] p;
+            return true;
           }
-          if(flag) return true;
         }
       }
       return false;
@@ -43,10 +42,9 @@ public:
           if(H.color_matrix[s-1][l2] != Color::BLUE) continue;
           p = H.blue_g->Dijkstra(0*s + l1, (s-1)*s + l2);
           if(p) {
-            flag = true;
             delete[] p;
+            return true;
           }
-          if(flag) return true;
         }
       }
       return false;
@@ -100,7 +98,6 @@ public:
             if(this->com_won(B)) win_count++;
 
           }
-         
           if(win_count >= max_wins) {
             if(win_count == max_wins) { //coin toss to pick (k, l)
               if(rand() > (RAND_MAX*1.0)/2) {
