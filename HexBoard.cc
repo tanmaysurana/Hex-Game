@@ -222,6 +222,14 @@ public:
         else c = '_';
         hout<<"("<<k<<","<<l<<"):"<<c;
         hout<<"       ";
+        if(k == sz-1 && l == 0) {
+          for(int it = 0; it < sz/2 - 1; it++) hout<<"        ";
+          hout<<"BLUE";
+        }
+        else if(k == 0 && l == sz-1) {
+          for(int it = 0; it < sz/2 - 1; it++) hout<<"        ";
+          hout<<"RED";
+        }
         k++;
         l++;
       }

@@ -1,5 +1,5 @@
 #include "HexPlayer.cc"
-
+   
 using namespace std;
 
 int main()
