@@ -1,5 +1,5 @@
 #include "HexPlayer.cc"
-   
+
 using namespace std;
 
 int main()
@@ -29,15 +29,15 @@ int main()
     pair<int, int>* com_move;
     com_move = h1.give_first_move(H, num_sims);
     H.hex_move(h1.color, com_move->first, com_move->second);
-    cout<<endl<<H<<endl;
+    cout<<endl<<H<<"\a"<<endl;
     com_move = h2.give_move(H, true, num_sims);
     if(com_move->first == -1 && com_move->second == -1) H.swap_move();
     else H.hex_move(h2.color, com_move->first, com_move->second);
-    cout<<endl<<H<<endl;
+    cout<<endl<<H<<"\a"<<endl;
     while(true){
       com_move = h1.give_move(H, false, num_sims);
       H.hex_move(h1.color, com_move->first, com_move->second);
-      cout<<endl<<H<<endl;
+      cout<<endl<<H<<"\a"<<endl;
       c = H.who_won();
       if(c == Color::RED) {
         cout<<"RED WON!"<<endl;
@@ -50,7 +50,7 @@ int main()
 
       com_move = h2.give_move(H, false, num_sims);
       H.hex_move(h2.color, com_move->first, com_move->second);
-      cout<<endl<<H<<endl;
+      cout<<endl<<H<<"\a"<<endl;
       c = H.who_won();
       if(c == Color::RED) {
         cout<<"RED WON!"<<endl;
@@ -73,7 +73,7 @@ int main()
     if(h.color == Color::RED) {
       com_move = h.give_first_move(H, num_sims);
       H.hex_move(h.color, com_move->first, com_move->second);
-      cout<<endl<<H<<endl;
+      cout<<endl<<"\a"<<H<<endl;
       char swap;
       cout<<"Swap Move? (y/n): ";
       cin>>swap;
@@ -89,11 +89,11 @@ int main()
           l = cl - '0';
         }
       }
-      cout<<endl<<H<<endl;
+      cout<<endl<<H<<"\a"<<endl;
       while(true) {
         com_move = h.give_move(H, false, num_sims);
         H.hex_move(h.color, com_move->first, com_move->second);
-        cout<<endl<<H<<endl;
+        cout<<endl<<H<<"\a"<<endl;
         c = H.who_won();
         if(c == Color::RED) {
           cout<<"RED WON!"<<endl;
@@ -112,7 +112,7 @@ int main()
           k = ck - '0';
           l = cl - '0';
         }
-        cout<<endl<<H<<endl;
+        cout<<endl<<H<<"\a"<<endl;
         c = H.who_won();
         if(c == Color::RED) {
           cout<<"RED WON!"<<endl;
@@ -134,11 +134,11 @@ int main()
         k = ck - '0';
         l = cl - '0';
       }
-      cout<<endl<<H<<endl;
+      cout<<endl<<H<<"\a"<<endl;
       com_move = h.give_move(H, true, num_sims);
       if(com_move->first == -1 && com_move->second == -1) H.swap_move();
       else H.hex_move(h.color, com_move->first, com_move->second);
-      cout<<endl<<H<<endl;
+      cout<<endl<<H<<"\a"<<endl;
       while(true) {
         cin>>ck>>cl;
         k = ck - '0';
@@ -149,7 +149,7 @@ int main()
           k = ck - '0';
           l = cl - '0';
         }
-        cout<<endl<<H<<endl;
+        cout<<endl<<H<<"\a"<<endl;
         c = H.who_won();
         if(c == Color::RED) {
           cout<<"RED WON!"<<endl;
@@ -161,7 +161,7 @@ int main()
         }
         com_move = h.give_move(H, false, num_sims);
         H.hex_move(h.color, com_move->first, com_move->second);
-        cout<<endl<<H<<endl;
+        cout<<endl<<H<<"\a"<<endl;
         c = H.who_won();
         if(c == Color::RED) {
           cout<<"RED WON!"<<endl;
@@ -188,7 +188,7 @@ int main()
       k = ck - '0';
       l = cl - '0';
     }
-    cout<<endl<<H<<endl;
+    cout<<endl<<H<<"\a"<<endl;
     cout<<"Swap Move? (y/n): ";
     char swap;
     cin>>swap;
@@ -204,7 +204,7 @@ int main()
         l = cl - '0';
       }
     }
-    cout<<endl<<H<<endl;
+    cout<<endl<<H<<"\a"<<endl;
     while(true) {
       cin>>ck>>cl;
       k = ck - '0';
@@ -215,7 +215,7 @@ int main()
         k = ck - '0';
         l = cl - '0';
       }
-      cout<<endl<<H<<endl;
+      cout<<endl<<H<<"\a"<<endl;
       c = H.who_won();
       if(c == Color::RED) {
         cout<<"RED WON!"<<endl;
@@ -234,7 +234,7 @@ int main()
         k = ck - '0';
         l = cl - '0';
       }
-      cout<<endl<<H<<endl;
+      cout<<endl<<H<<"\a"<<endl;
       c = H.who_won();
       if(c == Color::RED) {
         cout<<"RED WON!"<<endl;
